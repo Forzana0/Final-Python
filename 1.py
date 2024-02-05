@@ -28,61 +28,67 @@ def generate_and_save_password(length, use_uppercase, use_lowercase, use_digits,
         save_to_file(password, purpose)
 
 def save_to_file(password, purpose):
-    filename = "generated_passwords.txt"
+    filename = "Passwords.txt"
     with open(filename, "a") as file:
         file.write(f"Purpose: {purpose}, Password: {password}\n")
         messagebox.showinfo("File Updated", f"Password for {purpose} has been added to '{filename}'")
 
-class PasswordGeneratorApp:
-    def __init__(self, master):
-        self.master = master
-        master.title("Password Generator")
-
-        self.label = tk.Label(master, text="Enter the purpose of the password:")
-        self.label.pack()
-
-        self.purpose_entry = tk.Entry(master)
-        self.purpose_entry.pack()
-
-        self.length_label = tk.Label(master, text="Enter the length of the password:")
-        self.length_label.pack()
-
-        self.length_entry = tk.Entry(master)
-        self.length_entry.pack()
-
-        self.uppercase_var = tk.BooleanVar(value=True)
-        self.uppercase_checkbox = tk.Checkbutton(master, text="Include uppercase letters", variable=self.uppercase_var)
-        self.uppercase_checkbox.pack()
-
-        self.lowercase_var = tk.BooleanVar(value=True)
-        self.lowercase_checkbox = tk.Checkbutton(master, text="Include lowercase letters", variable=self.lowercase_var)
-        self.lowercase_checkbox.pack()
-
-        self.digits_var = tk.BooleanVar(value=True)
-        self.digits_checkbox = tk.Checkbutton(master, text="Include digits", variable=self.digits_var)
-        self.digits_checkbox.pack()
-
-        self.special_chars_var = tk.BooleanVar(value=True)
-        self.special_chars_checkbox = tk.Checkbutton(master, text="Include special characters", variable=self.special_chars_var)
-        self.special_chars_checkbox.pack()
-
-        self.generate_button = tk.Button(master, text="Generate Password", command=self.generate_password)
-        self.generate_button.pack()
-
-    def generate_password(self):
-        purpose = self.purpose_entry.get()
-        length = int(self.length_entry.get())
-        use_uppercase = self.uppercase_var.get()
-        use_lowercase = self.lowercase_var.get()
-        use_digits = self.digits_var.get()
-        use_special_chars = self.special_chars_var.get()
-
-        generate_and_save_password(length, use_uppercase, use_lowercase, use_digits, use_special_chars, purpose)
-
-def main():
+def generate_password_gui():
     root = tk.Tk()
-    app = PasswordGeneratorApp(root)
+    root.title("Password Generator")
+
+    root.iconbitmap("Lock.ico")
+
+    root.geometry("500x450")
+    background_image = tk.PhotoImage(file="Bg.gif")
+    background_label = tk.Label(root, image=background_image)
+    background_label.place(relwidth=1, relheight=1)
+
+    background_label.image = background_image
+    background_label.config(bg="white", bd=0)
+
+    label1 = tk.Label(root, text="Enter the purpose of the password:", font=("Comic Sans MS", 14), bg="black", fg="white")
+    label1.pack(pady=5)
+
+    purpose_entry = tk.Entry(root, font=("Comic Sans MS", 14))
+    purpose_entry.pack(pady=5)
+
+    label2 = tk.Label(root, text="Enter the length of the password:", font=("Comic Sans MS", 14), bg="black", fg="white")
+    label2.pack(pady=5)
+
+    length_entry = tk.Entry(root, font=("Comic Sans MS", 14))
+    length_entry.pack(pady=5)
+
+    uppercase_var = tk.BooleanVar(value=True)
+    uppercase_checkbox = tk.Checkbutton(root, text="Include uppercase letters", variable=uppercase_var, font=("Comic Sans MS", 14))
+    uppercase_checkbox.pack(pady=5)
+
+    lowercase_var = tk.BooleanVar(value=True)
+    lowercase_checkbox = tk.Checkbutton(root, text="Include lowercase letters", variable=lowercase_var, font=("Comic Sans MS", 14))
+    lowercase_checkbox.pack(pady=5)
+
+    digits_var = tk.BooleanVar(value=True)
+    digits_checkbox = tk.Checkbutton(root, text="Include digits", variable=digits_var, font=("Comic Sans MS", 14))
+    digits_checkbox.pack(pady=5)
+
+    special_chars_var = tk.BooleanVar(value=True)
+    special_chars_checkbox = tk.Checkbutton(root, text="Include special characters", variable=special_chars_var, font=("Comic Sans MS", 14))
+    special_chars_checkbox.pack(pady=5)
+
+    generate_button = tk.Button(root, text="Generate Password", command=lambda: generate_password_command(purpose_entry, length_entry, uppercase_var, lowercase_var, digits_var, special_chars_var), font=("Comic Sans MS", 14), bg="black", fg="white")
+    generate_button.pack(pady=10)
+
     root.mainloop()
 
+def generate_password_command(purpose_entry, length_entry, uppercase_var, lowercase_var, digits_var, special_chars_var):
+    purpose = purpose_entry.get()
+    length = int(length_entry.get())
+    use_uppercase = uppercase_var.get()
+    use_lowercase = lowercase_var.get()
+    use_digits = digits_var.get()
+    use_special_chars = special_chars_var.get()
+
+    generate_and_save_password(length, use_uppercase, use_lowercase, use_digits, use_special_chars, purpose)
+
 if __name__ == "__main__":
-    main()
+    generate_password_gui()
